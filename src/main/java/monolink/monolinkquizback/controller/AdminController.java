@@ -46,7 +46,7 @@ public class AdminController {
         List<ResultByUser> results = new ArrayList<>();
         for (Map.Entry<User, ResultDto> entry : resultsByUser.entrySet()) {
             results.add(ResultByUser.builder()
-                    .userName(entry.getKey().getUsername())
+                    .mail(entry.getKey().getEmail())
                     .percentage(entry.getValue().getPercentage() * 100)
                     .time(entry.getValue().getTime())
                     .build());

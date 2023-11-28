@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class ResultByUser {
 
-    private String userName;
+    private String mail;
     private Double percentage;
     private Double time;
 

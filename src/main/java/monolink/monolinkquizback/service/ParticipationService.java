@@ -97,6 +97,7 @@ public class ParticipationService {
         return ResultDto.builder()
                 .percentage((double) countGoodResponse / questionService.getQuestions().size() * 100)
                 .time(participation.getResponses().stream().mapToDouble(Response::getTime).sum())
+                .note(countGoodResponse + " / " + questionService.getQuestions().size())
                 .build();
     }
 

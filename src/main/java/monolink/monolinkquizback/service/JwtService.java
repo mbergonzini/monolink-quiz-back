@@ -7,6 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import monolink.monolinkquizback.auth.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
@@ -19,7 +20,8 @@ import java.util.Date;
 @Slf4j
 public class JwtService {
 
-    private static final String SECRET = "6A576D5A7134743777217A25432A462D4A614E645267556B5870327235753878";
+    @Value("${jwt.secret}")
+    private String secret;
 
     private static final String JWT_COOKIE = "monolink";
 
@@ -47,7 +49,7 @@ public class JwtService {
     }
 
     private SecretKey key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
     public boolean validateJwtToken(String authToken) {

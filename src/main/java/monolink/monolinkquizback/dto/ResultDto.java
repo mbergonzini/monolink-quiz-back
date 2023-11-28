@@ -9,4 +9,5 @@ public class ResultDto {
 
     private Double percentage;
     private Double time;
+    private String note;
 }
