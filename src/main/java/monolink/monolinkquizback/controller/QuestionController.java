@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import monolink.monolinkquizback.dto.ApiMessage;
+import monolink.monolinkquizback.dto.ImportMessage;
 import monolink.monolinkquizback.dto.QuestionDto;
 import monolink.monolinkquizback.entity.Image;
 import monolink.monolinkquizback.service.QuestionService;
@@ -45,9 +46,10 @@ public class QuestionController {
     })
     @PostMapping(path = "/questions", consumes = "application/json", produces = "application/json")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<QuestionDto>> postQuestions(@RequestBody List<QuestionDto> questions) {
+    public ResponseEntity<ApiMessage> postQuestions(@RequestBody List<QuestionDto> questions) {
         List<QuestionDto> questionDtos = service.saveQuestions(questions);
-        return ResponseEntity.ok().body(questionDtos);
+        ImportMessage importMessage = new ImportMessage("import questions ok", questionDtos.size());
+        return ResponseEntity.ok().body(importMessage);
     }
 
     @Operation(summary = "add Images zip", responses = {
@@ -56,8 +58,9 @@ public class QuestionController {
     @PostMapping(path = "/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiMessage> postImages(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-        service.saveImages(multipartFile);
-        return ResponseEntity.ok().body(ApiMessage.builder().message("upload zip ok").build());
+        int count = service.saveImages(multipartFile);
+        ImportMessage importMessage = new ImportMessage("upload zip images ok", count);
+        return ResponseEntity.ok().body(importMessage);
     }
 
     @Operation(summary = "get Images", responses = {

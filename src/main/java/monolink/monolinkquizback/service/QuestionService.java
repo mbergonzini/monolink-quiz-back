@@ -119,7 +119,7 @@ public class QuestionService {
         return null;
     }
 
-    public void saveImages(MultipartFile multipartFile)
+    public int saveImages(MultipartFile multipartFile)
             throws IOException {
         File path = new File("/images/");
         if (!path.exists()) {
@@ -139,7 +139,7 @@ public class QuestionService {
             zipEntry = zis.getNextEntry();
         }
         zis.closeEntry();
-
+        int count = 0;
         for (File file : path.listFiles()) {
             String s = Paths.get(file.getAbsolutePath()).getFileName().toString().split("\\.")[0];
             int id = Integer.valueOf(s);
@@ -152,8 +152,10 @@ public class QuestionService {
                     .build();
             fileInputStream.close();
             imageRepository.save(image);
+            count++;
             Files.delete(file.toPath());
         }
+        return count;
     }
 
     public Image getImage(Integer id) {
